@@ -100,7 +100,7 @@
     const status = document.getElementById('status');
     const enter = document.getElementById('enter');
 
-    fetch('https://api.github.com/repos/weihuanlv2/anquan/contents/target.json?ref=main', { cache: 'no-store' })
+    fetch('./target-20260930102253.json', { cache: 'no-store' })
       .then(response => {
         if (!response.ok) throw new Error('HTTP ' + response.status);
         return response.json();
