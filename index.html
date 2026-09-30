@@ -100,11 +100,12 @@
     const status = document.getElementById('status');
     const enter = document.getElementById('enter');
 
-    fetch('./target.json?t=' + Date.now(), { cache: 'no-store' })
+    fetch('https://api.github.com/repos/weihuanlv2/anquan/contents/target.json?ref=main', { cache: 'no-store' })
       .then(response => {
         if (!response.ok) throw new Error('HTTP ' + response.status);
         return response.json();
       })
+      .then(payload => JSON.parse(atob(payload.content.replace(/s/g, ''))))
       .then(data => {
         if (!/^https:\/\/[-a-z0-9]+\.trycloudflare\.com\/?$/.test(data.url || '')) {
           throw new Error('invalid target');
