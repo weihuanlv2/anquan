@@ -100,11 +100,28 @@
     const status = document.getElementById('status');
     const enter = document.getElementById('enter');
 
-    const target = 'https://metallic-players-odds-comfort.trycloudflare.com/';
-    enter.href = target;
-    enter.hidden = false;
-    status.textContent = '连接成功，正在进入看板';
-    window.setTimeout(() => window.location.replace(target), 700);
+    fetch("https://api.github.com/repos/weihuanlv2/anquan/contents/target.json?ref=main", { cache: "no-store" })
+      .then(response => {
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        return response.json();
+      })
+      .then(payload => JSON.parse(atob(payload.content.replace(/\s/g, ""))))
+      .then(data => {
+        if (!/^https:\/\/[-a-z0-9]+\.trycloudflare\.com\/?$/.test(data.url || "")) {
+          throw new Error("invalid target");
+        }
+        enter.href = data.url;
+        enter.hidden = false;
+        status.textContent = "连接成功，正在进入看板";
+        window.setTimeout(() => window.location.replace(data.url), 700);
+      })
+      .catch(() => {
+        panel.classList.add("error");
+        status.textContent = "暂时无法连接，请稍后重试";
+        enter.href = window.location.href;
+        enter.textContent = "重新尝试";
+        enter.hidden = false;
+      });
   </script>
 </body>
 </html>
